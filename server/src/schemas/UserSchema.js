@@ -6,7 +6,8 @@ const userSchema = new Schema(
     {
         email: { type: String, required: true, unique: true },
         password: { type: String, required: true },
-        fullName: { type: String },
+        name: { type: String },
+        role: { type: Schema.Types.ObjectId, ref: 'Role' },
     },
     { timestamps: true } // Adds createdAt & updatedAt
 );

@@ -1,10 +1,9 @@
 class SignUpDTO {
-    constructor(email, password, confirmPassword, fullName) {
+    constructor(email, password, name) {
 
         this.email = email;
         this.password = password;
-        this.confirmPassword = confirmPassword;
-        this.fullName = fullName;
+        this.name = name;
 
     }
 }
