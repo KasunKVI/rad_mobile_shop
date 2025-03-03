@@ -4,6 +4,7 @@ const cors = require("cors");
 const cookieParser = require('cookie-parser');
 const auth = require('./routes/auth');
 const connectDB = require('./config/db');
+const seedRoles = require('./utills/seedRoles');
 
 require('dotenv').config();
 
@@ -12,7 +13,8 @@ app.use(express.json());
 app.use(cors());
 
 connectDB().then(r => {
-
+    seedRoles().then(r => {
+    })
 });
 
 app.use('/api/v1/auth', auth);
