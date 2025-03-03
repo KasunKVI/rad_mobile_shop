@@ -1,6 +1,9 @@
 const User = require('../schemas/UserSchema');
 const Role = require('../schemas/RoleSchema');
 
+const bcrypt = require('bcrypt');
+
+
 const JWTService = require("../services/JWTService");
 
 
@@ -13,7 +16,7 @@ async function signUpUser(dto) {
         }
 
         // Hash the password
-        const hashedPassword = dto.password;
+        const hashedPassword = bcrypt.hashSync(dto.password, 10);
 
         // Find the role, default to 'USER' if not specified
         let role = await Role.findOne({ name: 'USER' });
@@ -52,4 +55,38 @@ async function signUpUser(dto) {
     }
 }
 
-module.exports = { signUpUser };
+async function signInUser(dto){
+    try {
+
+        // Find the user by email
+        const user = await User.findOne({ email: dto.email });
+
+        if (!user) {
+            throw new Error('Invalid email or password');
+        }
+
+        // Compare the provided password with the stored password (hash)
+        const isPasswordValid = await bcrypt.compare(dto.password, user.password);
+        if (!isPasswordValid) {
+            throw new Error('Invalid email or password');
+        }
+
+        // Generate the tokens
+        const tokens = await JWTService.generateToken({ userEmail: user.email });
+
+        return {
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                role: user.role,
+            },
+            token: tokens.accessToken,
+            refreshToken: tokens.refreshToken,
+        };
+    } catch (error) {
+        throw error;
+    }
+}
+
+module.exports = { signUpUser, signInUser };
