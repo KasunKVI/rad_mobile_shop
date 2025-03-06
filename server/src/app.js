@@ -3,6 +3,7 @@ const app = express();
 const cors = require("cors");
 const cookieParser = require('cookie-parser');
 const auth = require('./routes/auth');
+const product = require('./routes/product');
 const connectDB = require('./config/db');
 const seedRoles = require('./utills/seedRoles');
 
@@ -18,6 +19,7 @@ connectDB().then(r => {
 });
 
 app.use('/api/v1/auth', auth);
+app.use('/api/v1/product', product);
 
 app.listen(3000, () => {
     console.log('Server is running on port 3000');
