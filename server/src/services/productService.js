@@ -30,6 +30,28 @@ async function addNewProduct(dto){
 
 }
 
+async function getAllProducts() {
+    try {
+        const products = await Product.find();
+
+        const productDtos = products.map(product => ({
+            id: product.id,
+            name: product.name,
+            description: product.description,
+            price: product.price,
+            image: product.image,
+            category: product.category,
+            stock: product.stock,
+            featured: product.featured,
+            specs: product.specs,
+        }));
+
+        return productDtos;
+
+    } catch (error) {
+        throw error;
+    }
+}
 
 
 async function getProductById(productId) {

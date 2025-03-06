@@ -44,5 +44,19 @@ async function getProduct(req, res) {
     return res.status(200).json(product)
 }
 
+async function getProducts(req, res) {
+
+    const products = await getAllProducts();
+
+    if (!products) {
+        return res.status(400).send({"Status": "error"});
+    }
+
+    if (products.error){
+        return res.status(400).send({"Status": "error"});
+    }
+
+    res.status(200).json(products)
+}
 
 module.exports = {addProduct, getProduct, getProducts};
