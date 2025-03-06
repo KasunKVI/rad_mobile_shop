@@ -12,6 +12,11 @@ const userSchema = new Schema(
     { timestamps: true } // Adds createdAt & updatedAt
 );
 
+// Add a virtual to easily access role name
+userSchema.virtual('roleName').get(function() {
+    return this.role ? this.role.name : null;
+});
+
 // Create and export the model
 const User = mongoose.model('User', userSchema);
 module.exports = User;
