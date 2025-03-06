@@ -1,5 +1,5 @@
 const ProductDTO = require('../dtos/productDTO');
-const {addNewProduct} = require("../services/productService")
+const {addNewProduct, getProductById, getAllProducts} = require("../services/productService")
 
 async function addProduct(req, res) {
 
@@ -27,4 +27,22 @@ async function addProduct(req, res) {
 
 }
 
-module.exports = {addProduct};
+async function getProduct(req, res) {
+
+    const productId = req.params.id;
+
+    if (!productId) {
+        return res.status(400).send("Id required");
+    }
+
+    const product = await getProductById(productId)
+
+    if (!product) {
+        return res.status(400).send({"Status": "error"});
+    }
+
+    return res.status(200).json(product)
+}
+
+
+module.exports = {addProduct, getProduct, getProducts};

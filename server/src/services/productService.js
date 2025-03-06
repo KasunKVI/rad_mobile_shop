@@ -30,4 +30,37 @@ async function addNewProduct(dto){
 
 }
 
-module.exports = {addNewProduct}
+
+
+async function getProductById(productId) {
+    try {
+        if (!productId) {
+            throw new Error('Product ID is required!');
+        }
+
+        const product = await Product.findById(productId);
+        if (!product) {
+            throw new Error('Product not found!');
+        }
+
+        const productDto = {
+            id: product.id,
+            name: product.name,
+            description: product.description,
+            price: product.price,
+            image: product.image,
+            category: product.category,
+            stock: product.stock,
+            featured: product.featured,
+            specs: product.specs,
+        }
+
+        return productDto;
+
+    } catch (error) {
+        throw error;
+    }
+}
+
+
+module.exports = {addNewProduct, getProductById, getAllProducts}
