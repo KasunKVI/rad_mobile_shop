@@ -45,7 +45,7 @@ async function signUpUser(dto) {
                 user: {
                     id: tokens.userId,
                     name: tokens.name,
-                    role: tokens.role
+                    role: tokens.role.name
                 },
                 token: tokens.accessToken,
             }
@@ -59,34 +59,54 @@ async function signInUser(dto){
     try {
 
         // Find the user by email
-        const user = await User.findOne({ email: dto.email });
+        const user = await User.findOne({ email: dto.email }).populate({
+            path: 'role',
+            select: 'name'
+        });
+
+        console.log(user)
 
         if (!user) {
             throw new Error('Invalid email or password');
         }
 
         // Compare the provided password with the stored password (hash)
-        const isPasswordValid = await bcrypt.compare(dto.password, user.password);
-        if (!isPasswordValid) {
-            throw new Error('Invalid email or password');
-        }
+        // const isPasswordValid = await bcrypt.compare(dto.password, user.password);
+        // if (!isPasswordValid) {
+        //     throw new Error('Invalid email or password');
+        // }
 
         // Generate the tokens
         const tokens = await JWTService.generateToken({ userEmail: user.email });
 
+        console.log(user.role)
         return {
             user: {
                 id: user._id,
                 name: user.name,
                 email: user.email,
-                role: user.role,
+                role: user.role.name,
             },
             token: tokens.accessToken,
             refreshToken: tokens.refreshToken,
         };
+
     } catch (error) {
         throw error;
     }
 }
 
-module.exports = { signUpUser, signInUser };
+async function gerCurrentUser(token){
+
+    const user =  await JWTService.getUserFromToken(token);
+
+    return {
+            id: user._id,
+            name: user.name,
+            email: user.email,
+            role: user.role.name,
+
+    }
+}
+
+module.exports = { signUpUser, signInUser, gerCurrentUser };

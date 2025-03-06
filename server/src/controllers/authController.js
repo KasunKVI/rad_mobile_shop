@@ -1,6 +1,7 @@
-const { signUpUser, signInUser } = require('../services/authService');
+const { signUpUser, signInUser, gerCurrentUser } = require('../services/authService');
 const SignUpDTO = require('../dtos/SignUpDTO');
 const SignInDTO = require('../dtos/SignInDTO');
+
 
 async function signUp(req, res) {
     try {
@@ -38,7 +39,6 @@ async function signIn(req, res) {
 
     try {
 
-        console.log(req.body.email);
         // Convert request body to DTO
         const dto = new SignInDTO(
             req.body.email,
@@ -69,4 +69,28 @@ async function signIn(req, res) {
 
 }
 
-module.exports = { signUp, signIn };
+async function currentUser(req, res) {
+
+    try {
+
+        console.log(req.headers)
+        //get token
+        const token = req.headers['authorization'];
+
+        //split token from Bearer name
+         let split = token.split(' ');
+         console.log(split[0]);
+         console.log(split[1]);
+
+        const user = await gerCurrentUser(split[1])
+
+        console.log(user)
+        return res.status(200).json({user})
+
+    }catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+
+}
+
+module.exports = { signUp, signIn, currentUser };
