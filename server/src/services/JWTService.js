@@ -18,7 +18,10 @@ class JWTService {
         try {
             const decoded = await JWTService.decodeToken(token);
 
-            const user = await User.findOne({ _id: decoded.decode.id }).populate("role");
+            const user = await User.findOne({ _id: decoded.decode.id }).populate({
+                path: 'role',
+                select: 'name'
+            });
             if (!user) throw new Error("User not found");
 
             console.log("User:", user);
@@ -37,7 +40,10 @@ class JWTService {
 
 
         try{
-            const user = await User.findOne({ email: userDetails.userEmail }).populate("role");
+            const user = await User.findOne({ email: userDetails.userEmail }).populate({
+                path: 'role',
+                select: 'name'
+            });
             if (!user){
 
                 return { status: 404, message: 'User not found' };
@@ -69,7 +75,10 @@ class JWTService {
         const decoded = await JWTService.decodeToken(token);
         if (!decoded.status) return false;
 
-        const user = await User.findOne({ _id: decoded.decode.id }).populate("role");
+        const user = await User.findOne({ _id: decoded.decode.id }).populate({
+            path: 'role',
+            select: 'name'
+        });
         if (!user) return false; // User not found
 
         try{
@@ -82,7 +91,10 @@ class JWTService {
 
     static async getUserFromToken(token) {
         const id = JWTService.extractUsername(token);
-        const user = await User.findOne({ _id: id }).populate("role");
+        const user = await User.findOne({ _id: id }).populate({
+            path: 'role',
+            select: 'name'
+        });
         if (!user) throw new Error("User not found");
         return user;
     }
