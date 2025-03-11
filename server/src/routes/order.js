@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.post('/add', addOrder)
 
+router.patch('/update/status/:id', updateStatus)
 
 
 

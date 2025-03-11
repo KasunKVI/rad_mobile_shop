@@ -23,6 +23,17 @@ async function addNewOrder(orderDTO) {
 }
 
 
+async function updateOrderStatus(orderId, status) {
+    try {
+        const updatedOrder = await Order.findByIdAndUpdate(orderId, {status: status}, {new: true});
+
+        return updatedOrder;
+
+    } catch (error) {
+        return {error: error.message};
+    }
+}
+
 
 
 

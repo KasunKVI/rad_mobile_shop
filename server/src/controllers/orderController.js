@@ -25,5 +25,18 @@ async function addOrder(req, res) {
     res.status(200).json(result);
 }
 
+async function updateStatus(req, res) {
+    const orderId = req.params.id;
+    const status = req.body.status;
+
+    const updatedOrder = await updateOrderStatus(orderId, status);
+
+    if (updatedOrder.error){
+        return res.status(400).send({"Status": "error"});
+    }
+
+    res.status(200).json(updatedOrder);
+}
+
 
 module.exports = {addOrder, updateStatus}
