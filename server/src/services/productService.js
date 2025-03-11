@@ -134,5 +134,6 @@ async function deleteSelectedProduct(productId) {
     } catch (error) {
         throw error;
     }
+}
 
 module.exports = {addNewProduct, getProductById, getAllProducts, updateSelectedProduct, deleteSelectedProduct}
