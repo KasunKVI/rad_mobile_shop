@@ -84,5 +84,37 @@ async function getProductById(productId) {
     }
 }
 
+async function updateSelectedProduct(productId, product) {
 
-module.exports = {addNewProduct, getProductById, getAllProducts}
+    try {
+        if (!productId) {
+            throw new Error('Product ID is required!');
+        }
+
+        if (!product) {
+            throw new Error('Product data is required!');
+        }
+
+        const updatedProduct = await Product.findByIdAndUpdate(productId, {
+            name: product.name,
+            description: product.description,
+            price: product.price,
+            image: product.image,
+            category: product.category,
+            stock: product.stock,
+            featured: product.featured,
+            specs: product.specs,
+        }, {new: true});
+
+        if (!updatedProduct) {
+            throw new Error('Product not found!');
+        }
+
+        return updatedProduct;
+
+    } catch (error) {
+        throw error;
+    }
+}
+
+module.exports = {addNewProduct, getProductById, getAllProducts, updateSelectedProduct}

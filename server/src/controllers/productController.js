@@ -1,5 +1,5 @@
 const ProductDTO = require('../dtos/productDTO');
-const {addNewProduct, getProductById, getAllProducts} = require("../services/productService")
+const {addNewProduct, getProductById, getAllProducts, updateSelectedProduct, deleteSelectedProduct} = require("../services/productService")
 
 async function addProduct(req, res) {
 
@@ -59,4 +59,36 @@ async function getProducts(req, res) {
     res.status(200).json(products)
 }
 
-module.exports = {addProduct, getProduct, getProducts};
+async function updateProduct(req, res) {
+    const productId = req.params.id;
+    if (!productId) {
+        return res.status(400).send("Id required");
+
+    }
+
+     const dto = new ProductDTO(
+        "",
+        req.body.name,
+        req.body.description,
+        req.body.price,
+        req.body.image,
+        req.body.category,
+        req.body.stock,
+        req.body.featured,
+        req.body.specs,
+    )
+
+
+    const response = updateSelectedProduct(productId, dto);
+
+    if (response.error) {
+        return res.status(400).send({"Status": "error"});
+    }
+
+    res.status(200).json(response);
+
+}
+
+
+
+module.exports = {addProduct, getProduct, getProducts, updateProduct, deleteProduct};
