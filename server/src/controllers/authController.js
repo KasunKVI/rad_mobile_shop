@@ -1,4 +1,4 @@
-const { signUpUser, signInUser, gerCurrentUser } = require('../services/authService');
+const { signUpUser, signInUser, gerCurrentUser, getAllUsers } = require('../services/authService');
 const SignUpDTO = require('../dtos/SignUpDTO');
 const SignInDTO = require('../dtos/SignInDTO');
 
@@ -93,4 +93,17 @@ async function currentUser(req, res) {
 
 }
 
-module.exports = { signUp, signIn, currentUser };
+
+async function allUsers(req, res) {
+    try {
+        const users = await getAllUsers;
+        if (users.error){
+            return res.status(400).json({ error: users.error });
+        }
+        return res.status(200).json(users);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+}
+
+module.exports = { signUp, signIn, currentUser, allUsers };

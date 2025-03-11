@@ -109,4 +109,32 @@ async function gerCurrentUser(token){
     }
 }
 
-module.exports = { signUpUser, signInUser, gerCurrentUser };
+async function getAllUsers(){
+    try {
+        const users = await User.find().populate({
+            path: 'role',
+            select: 'name'
+        });
+
+        if (users.length === 0) {
+            return { error: 'No users found' };
+        }
+
+        const result = users.map(user => {
+            return {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                role: user.role.name,
+            }
+        });
+
+        return result;
+
+    }catch (error){
+        return error;
+    }
+}
+
+
+module.exports = { signUpUser, signInUser, gerCurrentUser, getAllUsers };
