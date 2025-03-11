@@ -1,5 +1,5 @@
 const OrderDTO = require('../dtos/orderDTO');
-const {addNewOrder, updateOrderStatus} = require("../services/orderService")
+const {addNewOrder, updateOrderStatus, getOrdersByUserId} = require("../services/orderService")
 
 
 async function addOrder(req, res) {
@@ -38,5 +38,16 @@ async function updateStatus(req, res) {
     res.status(200).json(updatedOrder);
 }
 
+async function getOrders(req, res) {
+    try {
+        const userId = req.query.userId || null; // Get userId from query params
+        const orders = await getOrdersByUserId(userId);
 
-module.exports = {addOrder, updateStatus}
+        res.status(200).json(orders);
+    } catch (error) {
+        res.status(500).json({ status: "error", message: error.message });
+    }
+}
+
+
+module.exports = {addOrder, updateStatus, getOrders}

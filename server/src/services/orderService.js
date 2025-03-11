@@ -1,4 +1,5 @@
 const Order = require('../schemas/OrderSchema');
+const OrderDTO = require("../dtos/orderDTO");
 
 
 async function addNewOrder(orderDTO) {
@@ -34,8 +35,43 @@ async function updateOrderStatus(orderId, status) {
     }
 }
 
+async function getOrdersByUserId(userId) {
+    try {
+        let orders;
+        if (userId) {
+            orders = await Order.find({ userId }).populate("items.product");
+        } else {
+            orders = await Order.find().populate("items.product");
+        }
+
+        return orders.map(order => new OrderDTO(
+            order._id,
+            order.userId,
+            order.items.map(item => ({
+                product: item.product ? {
+                    id: item.product._id,
+                    name: item.product.name,
+                    description: item.product.description,
+                    price: item.product.price,
+                    image: item.product.image,
+                    category: item.product.category,
+                    stock: item.product.stock,
+                    featured: item.product.featured,
+                    specs: item.product.specs
+                } : null, // Ensuring product details are included
+                quantity: item.quantity
+            })),
+            order.total,
+            order.status,
+            order.shippingAddress,
+            order.createdAt,
+            order.updatedAt
+        ));
+    } catch (error) {
+        return { error: error.message };
+    }
+}
 
 
 
-
-module.exports = {addNewOrder, updateOrderStatus}
+module.exports = {addNewOrder, updateOrderStatus, getOrdersByUserId}
