@@ -89,6 +89,21 @@ async function updateProduct(req, res) {
 
 }
 
+async function deleteProduct(req, res) {
+    const productId = req.params.id;
 
+    if (!productId) {
+        return res.status(400).send("Id required");
+    }
+
+    const product = await deleteSelectedProduct(productId);
+
+    if (!product) {
+        return res.status(400).send({"Status": "error"});
+    }
+
+    return res.status(200).json(product)
+
+}
 
 module.exports = {addProduct, getProduct, getProducts, updateProduct, deleteProduct};

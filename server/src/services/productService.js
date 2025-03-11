@@ -117,4 +117,22 @@ async function updateSelectedProduct(productId, product) {
     }
 }
 
-module.exports = {addNewProduct, getProductById, getAllProducts, updateSelectedProduct}
+async function deleteSelectedProduct(productId) {
+    try {
+        if (!productId) {
+            throw new Error('Product ID is required!');
+        }
+
+        const deletedProduct = await Product.findByIdAndDelete(productId);
+
+        if (!deletedProduct) {
+            throw new Error('Product not found!');
+        }
+
+        return deletedProduct;
+
+    } catch (error) {
+        throw error;
+    }
+
+module.exports = {addNewProduct, getProductById, getAllProducts, updateSelectedProduct, deleteSelectedProduct}
