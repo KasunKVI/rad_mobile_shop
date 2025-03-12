@@ -9,7 +9,7 @@ router.get('/getSelected/:id', getProduct);
 
 router.get('/products', getProducts);
 
-router.put('/update', updateProduct)
+router.put('/update/:id', updateProduct)
 
 router.delete('/delete/:id', deleteProduct)
 
