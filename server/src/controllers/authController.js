@@ -96,7 +96,9 @@ async function currentUser(req, res) {
 
 async function allUsers(req, res) {
     try {
-        const users = await getAllUsers;
+
+        const users = await getAllUsers();
+
         if (users.error){
             return res.status(400).json({ error: users.error });
         }

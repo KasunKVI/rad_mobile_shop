@@ -111,6 +111,7 @@ async function gerCurrentUser(token){
 
 async function getAllUsers(){
     try {
+
         const users = await User.find().populate({
             path: 'role',
             select: 'name'
@@ -120,7 +121,7 @@ async function getAllUsers(){
             return { error: 'No users found' };
         }
 
-        const result = users.map(user => {
+        return users.map(user => {
             return {
                 id: user._id,
                 name: user.name,
@@ -128,8 +129,6 @@ async function getAllUsers(){
                 role: user.role.name,
             }
         });
-
-        return result;
 
     }catch (error){
         return error;
