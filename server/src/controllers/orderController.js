@@ -6,14 +6,16 @@ async function addOrder(req, res) {
 
     const dto = new OrderDTO(
         "",
-        req.base.userId,
+        req.body.userId,
         req.body.items,
         req.body.total,
-        req.body.status,
+        "pending",
         req.body.shippingAddress,
-        req.body.createdAt,
+        new Date(),
         new Date(),
     )
+
+    console.log(dto)
 
     const result = await addNewOrder(dto);
 
