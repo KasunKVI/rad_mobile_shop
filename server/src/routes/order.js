@@ -5,7 +5,7 @@ const authenticateJWT = require("../middleware/authenticateJWT");
 const router = express.Router();
 
 
-router.post('/add', authenticateJWT(['ADMIN', 'USER']),authenticateJWT(['ADMIN', 'USER']), addOrder)
+router.post('/add', authenticateJWT(['ADMIN', 'USER']), addOrder)
 
 router.patch('/update/status/:id', authenticateJWT(['ADMIN']), updateStatus)
 
