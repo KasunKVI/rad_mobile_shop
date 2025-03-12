@@ -1,17 +1,19 @@
 const express = require('express');
 const router = express.Router();
 const { addProduct, getProduct, getProducts, updateProduct ,deleteProduct} = require('../controllers/productController');
+const authenticateJWT = require("../middleware/authenticateJWT");
 
 
-router.post('/add', addProduct)
 
-router.get('/getSelected/:id', getProduct);
+router.post('/add', authenticateJWT(['ADMIN']), addProduct)
 
-router.get('/products', getProducts);
+router.get('/getSelected/:id', authenticateJWT(['ADMIN', 'USER']), getProduct);
 
-router.put('/update/:id', updateProduct)
+router.get('/products', authenticateJWT(['ADMIN', 'USER']), getProducts);
 
-router.delete('/delete/:id', deleteProduct)
+router.put('/update/:id',authenticateJWT(['ADMIN']), updateProduct)
+
+router.delete('/delete/:id', authenticateJWT(['ADMIN']), deleteProduct)
 
 
 

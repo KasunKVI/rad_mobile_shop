@@ -1,13 +1,15 @@
 const express = require('express');
 const {addOrder, updateStatus, getOrders} = require("../controllers/orderController");
+const authenticateJWT = require("../middleware/authenticateJWT");
+
 const router = express.Router();
 
 
-router.post('/add', addOrder)
+router.post('/add', authenticateJWT(['ADMIN', 'USER']),authenticateJWT(['ADMIN', 'USER']), addOrder)
 
-router.patch('/update/status/:id', updateStatus)
+router.patch('/update/status/:id', authenticateJWT(['ADMIN']), updateStatus)
 
-router.get('/get', getOrders);
+router.get('/get',authenticateJWT(['ADMIN', 'USER']), getOrders);
 
 
 
